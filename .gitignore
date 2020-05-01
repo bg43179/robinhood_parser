@@ -1,0 +1,10 @@
+# mac os
+.DS_Store
+
+# python
+*.pyc
+__pycache__/
+
+# selenium
+chromedriver
+geckodriver.log
