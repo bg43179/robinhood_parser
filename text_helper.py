@@ -22,6 +22,8 @@ def process(arr):
 def convert_action(action):
   if action == 'Market Sell':
     return 1
+  elif action == 'Limit Sell':
+    return 1
   elif action == 'Dividend':
     return 1
   else:
