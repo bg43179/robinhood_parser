@@ -30,7 +30,13 @@ def convert_action(action):
     return -1
 
 def parse_dollar(number):
-    return float(number[1:].replace(',', ''))
+  start_idx = 0
+  if number.startswith('+'):
+    start_idx = 2
+  else:
+    start_idx = 1
+  
+  return float(number[start_idx:].replace(',', ''))
 
 
 if __name__ == '__main__':
