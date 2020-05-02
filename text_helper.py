@@ -1,4 +1,4 @@
-import functools 
+import functools
 
 def process(arr):
   actions = []
@@ -8,6 +8,10 @@ def process(arr):
       actions.append(val)
     else:
       values.append(val)
+
+    if val == 'Canceled':
+      actions.pop()
+      values.pop()
 
   action_values = list(zip(map(convert_action, actions), map(parse_dollar, values)))
   print(action_values)
@@ -31,5 +35,3 @@ if __name__ == '__main__':
   # toss some unit test overhere
   assert 1000.12 == parse_dollar('$1,000.12')
   assert '2000.12' == process(['Market Sell', '$1,000.12', 'Dividend', '$2,000.99', 'Market Buy', '$1,000.99'])
-  
-  
