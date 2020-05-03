@@ -29,7 +29,7 @@ def run(mapper):
       print(name, process(result))
 
     except TimeoutException as ex:
-      print(driver.page_source.encode("utf-8"))
+      print("You don't have this stock")
 
     # Switch to tab
     driver.find_element_by_tag_name('body').send_keys(Keys.COMMAND + 't') 
