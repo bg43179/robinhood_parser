@@ -21,6 +21,13 @@ NFLX https://robinhood.com/history/81733743-965a-4d93-b87a-6973cb9efd34
 
 # Total money that have spent in buying NFLX
 NFLX -200
+3. Support customized mapper `python parser.py -c`. You need to create a `custom_mapper.json` file as follow
+```json
+{
+   "AAPL": "https://robinhood.com/history/450dfc6d-5510-4d40-abfb-f633b7d9be3e",
+  "AMZN": "https://robinhood.com/history/c0bb3aec-bd1e-471e-a4f0-ca011cbec711",
+  ...
+}
 ```
 
 ## Setup

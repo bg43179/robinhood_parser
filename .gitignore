@@ -5,6 +5,9 @@
 *.pyc
 __pycache__/
 
+# skip custom_mapper
+custom_mapper.json
+
 # selenium
 chromedriver
 geckodriver.log
