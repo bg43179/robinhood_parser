@@ -20,14 +20,10 @@ def process(arr):
   return "{:.2f}".format(result)
 
 def convert_action(action):
-  if action == 'Market Sell':
+  if action in ['Market Sell', 'Limit Sell', 'Dividend', 'Stop Loss Sell']:
     return 1
-  elif action == 'Limit Sell':
-    return 1
-  elif action == 'Dividend':
-    return 1
-  else:
-    return -1
+  
+  return -1
 
 def parse_dollar(number):
   start_idx = 0
