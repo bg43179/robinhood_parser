@@ -33,6 +33,10 @@ def parse_dollar(number):
     start_idx = 1
   
   return float(number[start_idx:].replace(',', ''))
+  try:
+    return float(number[start_idx:].replace(',', ''))
+  except ValueError:
+    return 0
 
 
 if __name__ == '__main__':
