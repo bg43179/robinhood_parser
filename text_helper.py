@@ -1,6 +1,18 @@
 import functools
 
-def process(arr):
+def process(arr, exclude_dividend):
+  def convert_action(action):
+    if action in ['Market Sell', 'Limit Sell', 'Stop Loss Sell']:
+      return 1
+
+    if action == 'Dividend':
+      if exclude_dividend:
+        return 0
+      else:
+        return 1
+
+    return -1
+
   actions = []
   values = []
   for idx, val in enumerate(arr):
@@ -18,12 +30,6 @@ def process(arr):
 
   return action_values, result
 
-def convert_action(action):
-  if action in ['Market Sell', 'Limit Sell', 'Dividend', 'Stop Loss Sell']:
-    return 1
-  
-  return -1
-
 def parse_dollar(number):
   start_idx = 0
   if number.startswith('+'):
@@ -40,4 +46,4 @@ def parse_dollar(number):
 if __name__ == '__main__':
   # toss some unit test overhere
   assert 1000.12 == parse_dollar('$1,000.12')
-  # process(['Market Sell', '$1,000.12', 'Dividend', '$2,000.99', 'Market Buy', '$1,000.99']))
+  assert ([(1, 3.0), (-1, 1000.99)], -997.99) == process(['Dividend', '+$3.00', 'Market Buy', '$1,000.99'], False)
