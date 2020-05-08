@@ -1,6 +1,8 @@
 # Robinhood Parser
 A selenium-based parser to extract trading history
 
+## Why
+Robinhood already have the summary, why do I need to parse the data on my own? [Read this](https://medium.com/@bg43179/why-dont-i-use-robinhood-s-average-price-d70c9383c6af)
 
 ## How to use
 1. You need to edit exisitng  `defualt_mapper.json` file as follow
