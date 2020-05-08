@@ -1,4 +1,5 @@
 #coding=utf-8
+import argparse
 import sys
 from text_helper import *
 from company_mapper import *
@@ -28,7 +29,7 @@ def run(mapper):
       elements = wait.until(ec.presence_of_all_elements_located((By.TAG_NAME, 'h3')))
       result = map(lambda element: element.text, elements)
       
-      summary.history, summary.total_cost = process(result)
+      summary.history, summary.total_cost = process(result, args.exclude)
     except TimeoutException as ex:
       print("You don't have this stock")
 
@@ -50,11 +51,18 @@ def run(mapper):
     print(summary)
 
 if __name__ == '__main__':
-  if len(sys.argv) > 2:
-    print('Invalid number of input')
-    sys.exit()
-  
-  if len(sys.argv) > 1 and sys.argv[1] == '-c':
+  parser = argparse.ArgumentParser(description='Take a glance at how your robinhood performs')
+  parser.add_argument('-c', '--custom', action="store_true",
+                      help='use custom mapper, pdate custom_mapper.json with your portfolio')
+  parser.add_argument('-e', '--exclude', action="store_true",
+                      help='exclude dividend gain in performance')
+
+  args = parser.parse_args()
+
+  if args.custom:
+    print('Start to read your portfolio...')
+    if args.exclude:
+      print('excluding dividend')
     run(custom_mapper())
   else:
     run(default_mapper())
