@@ -1,5 +1,5 @@
 #coding=utf-8
-import argparse
+import argparse, pathlib
 import sys
 from text_helper import *
 from company_mapper import *
@@ -52,17 +52,17 @@ def run(mapper):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Take a glance at how your robinhood performs')
-  parser.add_argument('-c', '--custom', action="store_true",
-                      help='use custom mapper, pdate custom_mapper.json with your portfolio')
+  parser.add_argument('-c', '--custom', type=pathlib.Path,
+                      help='use custom mapper, update custom_mapper.json with your portfolio')
   parser.add_argument('-e', '--exclude', action="store_true",
                       help='exclude dividend gain in performance')
 
   args = parser.parse_args()
+  
+  print('Start to read your portfolio...')
 
-  if args.custom:
-    print('Start to read your portfolio...')
-    if args.exclude:
-      print('excluding dividend')
-    run(custom_mapper())
-  else:
-    run(default_mapper())
+  if args.exclude:
+    print('excluding dividend')
+
+  default_path = './mapper/default_mapper.json'
+  run(custom_mapper(args.custom or default_path))
