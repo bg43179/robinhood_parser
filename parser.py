@@ -49,10 +49,31 @@ def run(mapper):
     
     print(stock.performance())
 
+def get_dividend(mapper):
+  driver = webdriver.Chrome()
+  print('You have 60 sec to login')
+
+  for symbol, url in mapper:
+    driver.get(url)
+    wait = WebDriverWait(driver, 60)
+
+    try:
+      elements = wait.until(ec.presence_of_all_elements_located((By.CLASS_NAME, '_2dd7UBEjupbjwapwV9x2ys')))
+      history = map(lambda element: element.text, elements)
+      stock = Stock(symbol, history)
+
+      stock.parse()
+
+      print(stock.dividend())
+    except TimeoutException as ex:
+      print("You don't have this stock")
+
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Take a glance at how your robinhood performs')
   parser.add_argument('-c', '--custom', type=pathlib.Path,
                       help='use custom mapper, update custom_mapper.json with your portfolio')
+  parser.add_argument('-d', '--dividend', action="store_true",
+                      help='view your dividend gain by symbol')
   parser.add_argument('-e', '--exclude', action="store_true",
                       help='exclude dividend gain in performance')
 
@@ -64,4 +85,8 @@ if __name__ == '__main__':
     print('excluding dividend')
 
   default_path = './mapper/default_mapper.json'
-  run(custom_mapper(args.custom or default_path))
+  if args.dividend:
+    print('view dividend gain')
+    get_dividend(custom_mapper(args.custom or default_path))
+  else:
+    run(custom_mapper(args.custom or default_path))
