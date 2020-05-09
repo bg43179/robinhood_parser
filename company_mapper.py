@@ -1,7 +1,7 @@
 import json
 
 def custom_mapper(file_name):
-  print('Fetch mapper from ' + str(file_name))
+  print('Fetch mapper from ' + file_name)
   
   f = open(file_name)
   data = json.load(f) 
