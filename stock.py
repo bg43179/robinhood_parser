@@ -12,7 +12,10 @@ class Stock:
     self.dividend_gain = 0
 
   def performance(self):
-    return "{} - cost: {:.2f}, equity: {:.2f}, profit: {:.2f}".format(self.symbol, abs(self.total_cost), self.equity, self.gain_loss())
+    if self.gain_loss() > 0:
+      return "{} - cost: {:.2f}, equity: {:.2f}, profit: \033[1;32;40m {:.2f}".format(self.symbol, abs(self.total_cost), self.equity, self.gain_loss())
+    else:
+      return "{} - cost: {:.2f}, equity: {:.2f}, profit: \033[1;31;40m {:.2f}".format(self.symbol, abs(self.total_cost), self.equity, self.gain_loss())
 
   def dividend(self):
     return "{} - profit: {:.2f}".format(self.symbol, self.dividend_gain)
@@ -54,15 +57,18 @@ class Stock:
 
 if __name__ == '__main__':
   # toss some unit test overhere
-  all_history = [u'Dividend\nMay 15, 2020\n+$2.00\nPending', u'Limit Sell\nMay 6\n$90.00\n2 shares at $45.00', u'Dividend\nApr 16\n+$1.0', u'Limit Buy\nApr 16\n$105.00\n2 shares at $52.50', u'Limit Buy\nApr 16\nCanceled']
+  all_history = [u'Dividend\nMay 15, 2020\n+$2.00\nPending', u'Limit Sell\nMay 6\n$90.00\n3 shares at $30.00', u'Dividend\nApr 16\n+$1.0', u'Limit Buy\nApr 16\n$100.00\n4 shares at $25.00', u'Limit Buy\nApr 16\nCanceled']
   stock = Stock('O', all_history)
   stock.parse()
+  stock.equity = 35.0
   
-  assert -12.0 == stock.total_cost
+  assert -7.0 == stock.total_cost
   assert 3.0 == stock.dividend_gain
-  assert 0.0 == stock.shares
+  assert 1.0 == stock.shares
+
+  print(stock.performance())
 
   stock = Stock('O', all_history)
   stock.parse(True)
 
-  assert -15.0 == stock.total_cost
+  assert -10.0 == stock.total_cost
