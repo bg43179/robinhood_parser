@@ -1,6 +1,7 @@
 #coding=utf-8
 import argparse
 import sys
+import csv
 from number_helper import parse_dollar
 from company_mapper import *
 from stock import Stock
@@ -18,6 +19,9 @@ from selenium.common.exceptions import TimeoutException
 def run(mapper):
   driver = webdriver.Chrome()
   print('You have 60 sec to login')
+  with open('performance.csv', 'w') as csvfile:
+    writer = csv.writer(csvfile, delimiter=',')
+    writer.writerow(['Symbol', 'Shares', 'Cost', 'Equity', 'Gain/Loss'])
   
   for symbol, url in mapper:
     driver.get(url)
@@ -49,9 +53,16 @@ def run(mapper):
     
     print(stock.performance())
 
+    with open('performance.csv', 'a') as csvfile:
+      writer = csv.writer(csvfile, delimiter=',')
+      writer.writerow([stock.symbol, stock.shares, str(round(stock.total_cost, 2)), stock.equity, str(round(stock.gain_loss(), 2))])
+
 def get_dividend(mapper):
-  driver = webdriver.Chrome()
+  driver = webdriver.Chrome('./chromedriver')
   print('You have 60 sec to login')
+  with open('dividend.csv', 'w') as csvfile:
+    writer = csv.writer(csvfile, delimiter=',')
+    writer.writerow(['Symbol', 'Dividend'])
 
   for symbol, url in mapper:
     driver.get(url)
@@ -65,6 +76,10 @@ def get_dividend(mapper):
       stock.parse()
 
       print(stock.dividend())
+
+      with open('dividend.csv', 'a') as csvfile:
+        writer = csv.writer(csvfile, delimiter=',')
+        writer.writerow([stock.symbol, stock.dividend_gain])
     except TimeoutException as ex:
       print("You don't have this stock")
 

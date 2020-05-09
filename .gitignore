@@ -8,6 +8,10 @@ __pycache__/
 # skip custom_mapper
 custom_mapper.json
 
+# output file
+dividend.csv
+performance.csv
+
 # selenium
 chromedriver
 geckodriver.log
