@@ -1,9 +1,9 @@
 #coding=utf-8
 import argparse, pathlib
 import sys
-from text_helper import *
+from number_helper import parse_dollar
 from company_mapper import *
-from summary import Summary
+from stock import Stock
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -19,17 +19,16 @@ def run(mapper):
   driver = webdriver.Chrome()
   print('You have 60 sec to login')
   
-  for name, url in mapper:
+  for symbol, url in mapper:
     driver.get(url)
-    summary = Summary(name)
-    
     wait = WebDriverWait(driver, 60)
 
     try:
-      elements = wait.until(ec.presence_of_all_elements_located((By.TAG_NAME, 'h3')))
-      result = map(lambda element: element.text, elements)
-      
-      summary.history, summary.total_cost = process(result, args.exclude)
+      elements = wait.until(ec.presence_of_all_elements_located((By.CLASS_NAME, '_2dd7UBEjupbjwapwV9x2ys')))
+      history = map(lambda element: element.text, elements)
+
+      stock = Stock(symbol, history)
+      stock.parse(args.exclude)
     except TimeoutException as ex:
       print("You don't have this stock")
 
@@ -37,18 +36,18 @@ def run(mapper):
     driver.find_element_by_tag_name('body').send_keys(Keys.COMMAND + 't') 
 
     # Get current equity
-    driver.get('https://robinhood.com/stocks/' + name)
+    driver.get('https://robinhood.com/stocks/' + symbol)
     wait = WebDriverWait(driver, 10)
 
     try:
       elements = wait.until(ec.presence_of_all_elements_located((By.TAG_NAME, 'h2')))
-      summary.equity = parse_dollar(elements[0].text)
+      stock.equity = parse_dollar(elements[0].text)
     except TimeoutException as ex:
       print("You don't have this stock right now")
 
     driver.find_element_by_tag_name('body').send_keys(Keys.COMMAND + 't') 
     
-    print(summary)
+    print(stock.performance())
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Take a glance at how your robinhood performs')
