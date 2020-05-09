@@ -19,6 +19,16 @@ Robinhood already have the summary, why do I need to parse the data on my own? [
 #input
 python parser.py [-e] [-c file_path]
 ```
+- Optional Arguments:
+```shell
+
+  -h, --help            show this help message and exit
+  -c CUSTOM, --custom CUSTOM
+                        use custom mapper, update custom_mapper.json with your
+                        portfolio
+  -d, --dividend        view your dividend gain by symbol
+  -e, --exclude         exclude dividend gain in performance
+```
 
 - The browser will ask you to login your Robinhood account, also 2FA if you have it on.
 
