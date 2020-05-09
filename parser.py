@@ -1,5 +1,5 @@
 #coding=utf-8
-import argparse, pathlib
+import argparse
 import sys
 from number_helper import parse_dollar
 from company_mapper import *
@@ -70,7 +70,7 @@ def get_dividend(mapper):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Take a glance at how your robinhood performs')
-  parser.add_argument('-c', '--custom', type=pathlib.Path,
+  parser.add_argument('-c', '--custom', type=str,
                       help='use custom mapper, update custom_mapper.json with your portfolio')
   parser.add_argument('-d', '--dividend', action="store_true",
                       help='view your dividend gain by symbol')
