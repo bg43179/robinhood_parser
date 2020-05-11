@@ -1,11 +1,10 @@
-from number_helper import parse_dollar
+from number_helper import parse_dollar, parse_date
 
 class Stock:
   def __init__(self, symbol, history = []):
     self.symbol = symbol
     self.history = history
     self.dict_history = []
-    self.dividend_is_pending = False
     self.shares = 0
     self.total_cost = 0
     self.equity = 0
@@ -26,7 +25,7 @@ class Stock:
       attrs = transaction.split('\n')
       transaction_dict['action'] = attrs[0]
       transaction_dict['action_multiplier'] = self.convert_action(attrs[0])
-      transaction_dict['date'] = attrs[1]
+      transaction_dict['date'] = parse_date(attrs[1])
       transaction_dict['amount'] = parse_dollar(attrs[2])
       if len(attrs) == 4:
         if attrs[0] != 'Dividend':
