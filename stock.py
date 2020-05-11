@@ -33,10 +33,11 @@ class Stock:
     self.dividend_gain = 0
 
   def performance(self):
-    if self.gain_loss() > 0:
-      return "{} - cost: {:.2f}, equity: {:.2f}, profit: \033[1;32;40m {:.2f}".format(self.symbol, abs(self.total_cost), self.equity, self.gain_loss())
-    else:
-      return "{} - cost: {:.2f}, equity: {:.2f}, profit: \033[1;31;40m {:.2f}".format(self.symbol, abs(self.total_cost), self.equity, self.gain_loss())
+    cost = '{} - cost: {:.2f}'.format(self.symbol, abs(self.total_cost) if self.total_cost < 0 else 0)
+    equity = 'equity: {:.2f}'.format(self.equity)
+    profit = "profit: \033[1;{};40m{:.2f}\033[0m".format('32' if self.gain_loss() > 0 else '31', self.gain_loss())
+    
+    return ' '.join([cost, equity, profit])
 
   def dividend(self):
     return "{} - profit: {:.2f}".format(self.symbol, self.dividend_gain)
