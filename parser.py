@@ -4,7 +4,7 @@ import sys
 import csv
 from number_helper import parse_dollar
 from company_mapper import *
-from stock import Stock
+from stock import Transaction, Stock
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -29,7 +29,7 @@ def run(mapper):
 
     try:
       elements = wait.until(ec.presence_of_all_elements_located((By.CLASS_NAME, '_2dd7UBEjupbjwapwV9x2ys')))
-      history = map(lambda element: element.text, elements)
+      history = map(lambda element: Transaction(element.text), elements)
 
       stock = Stock(symbol, history)
       stock.parse(args.exclude)
