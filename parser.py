@@ -2,6 +2,7 @@
 import argparse
 import sys
 import csv
+from itertools import groupby
 from number_helper import parse_dollar
 from company_mapper import *
 from stock import Stock
@@ -58,11 +59,13 @@ def run(mapper):
       writer.writerow([stock.symbol, stock.shares, str(round(stock.total_cost, 2)), stock.equity, str(round(stock.gain_loss(), 2))])
 
 def get_dividend(mapper):
-  driver = webdriver.Chrome('./chromedriver')
+  driver = webdriver.Chrome()
   print('You have 60 sec to login')
   with open('dividend.csv', 'w') as csvfile:
     writer = csv.writer(csvfile, delimiter=',')
     writer.writerow(['Symbol', 'Dividend'])
+  
+  dividends = []
 
   for symbol, url in mapper:
     driver.get(url)
@@ -77,11 +80,17 @@ def get_dividend(mapper):
 
       print(stock.dividend())
 
+      dividends += [t for t in stock.dict_history if t['action'] == 'Dividend']
+
       with open('dividend.csv', 'a') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerow([stock.symbol, stock.dividend_gain])
     except TimeoutException as ex:
       print("You don't have this stock")
+
+  dividends.sort(key=lambda x:x['date'])
+  for k,v in groupby(dividends, key=lambda x:x['date'].strftime('%b %Y')):
+    print("{} - ${:.2f}".format(k, sum(div['amount'] for div in list(v))))
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Take a glance at how your robinhood performs')
