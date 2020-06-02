@@ -28,7 +28,7 @@ def run(mapper):
     wait = WebDriverWait(driver, 60)
 
     try:
-      elements = wait.until(ec.presence_of_all_elements_located((By.CLASS_NAME, '_2dd7UBEjupbjwapwV9x2ys')))
+      elements = wait.until(ec.presence_of_all_elements_located((By.CLASS_NAME, '_3znyYq5FdX98HAPHPumJG1')))
       history = map(lambda element: Transaction(element.text), elements)
 
       stock = Stock(symbol, history)
